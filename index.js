@@ -62,7 +62,6 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
     var query = req.query.pokemon
     var vetor = []
     var pokemon1 = []
-    console.log(query)
     if(query==undefined){  //-CASO NO TENHA QUERY STRING, FAZ UMA REQUISIÇÃO EM DUAS API E RETORNA O NOME DE UMA API E O HP DO POKEMON DE OUTRA API, ONDE TRAZ OS 3 PRIMEIROS POKÉMONS DA PRIMEIRA API
         var url = "https://pokeapi.co/api/v2/pokemon/?limit=3"
         var requisicao = axios.get(url)
@@ -94,8 +93,11 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
         var url = "https://pokeapi.co/api/v2/pokemon/"+query  //- FAZ A REQUISIÇÃO DO NOME DO POKÉMON QUE FOI PASSADO PELA QUERY STRING
         var requisicao = axios.get(url)
         requisicao.then(function(resposta){
-            
             pokemon1.push(resposta.data.species.name)
+            
+        })
+        requisicao.catch(function(resposta){
+            res.send("Erro 404, requisição não processada!")
         })
         
         var url1 ="https://api.pokemontcg.io/v2/cards" // FAZ A REQUISIÇÃO E TRAZ O HP DO POKÉMON QUE FOI PASSADO POR QUERY STRING
@@ -107,7 +109,6 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
                             "Name": pokemon1[0],
                             "HP": resposta1.data.data[j].hp
                         }
-                        console.log(obs)
                         vetor.push(obs)
                         break;
                     }
@@ -115,7 +116,8 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
         if(vetor[0]==[]){ //- RETORNA UM ERRO 404 CASO A QUERY STRING NÃO FOI ENCONTRADA
             vetor[0]="Error 404, query não encontrada!"
             res.send(vetor)
-        }else{
+        }
+        else{
         res.send(vetor)
         }
         
@@ -127,14 +129,19 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
 
 app.get('/ageofempires2',function(req, res){  //- ROTA DO AGE OF EMPIRES 2
     var vetor=[]
+    var vetor_unico=[]
+    var query=req.query.civilização
+    var nome
     var url="https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/" //- FAZ REQUISIÇÃO NO SITE DA STEAM
     var requisicao = axios.get(url)
     requisicao.then(function(resposta){
         var root=parser(resposta.data)
         var jogo=root.querySelectorAll('.apphub_AppName') //- PEGA O NOME E A EDIÇÃO DO JOGO
         var nome_jogo=parser(jogo)
+        nome=nome_jogo.innerText
         var obs={
-            "Nome": nome_jogo.innerText
+            "Jogo": nome_jogo.innerText,
+            
         }
         vetor.push(obs) //- INSERE NO VETOR O NOME DO JOGO
     })
@@ -145,10 +152,27 @@ app.get('/ageofempires2',function(req, res){  //- ROTA DO AGE OF EMPIRES 2
         var civilizations=resposta.data.civilizations;
         for(i=0;i<civilizations.length;i++){
             var obs={
-                "Civilizações":civilizations[i].name
+                "Civilização":civilizations[i].name
             }
             vetor.push(obs)
         }
+        if(query!=undefined){
+            for(i=0;i<civilizations.length;i++){
+                if(query.toUpperCase()==civilizations[i].name.toUpperCase()){
+                    var obs={
+                        "Jogo":nome,
+                        "Civilização":civilizations[i].name
+                    }
+                    vetor_unico.push(obs)
+                    res.send(vetor_unico)
+                    return
+                }if(i+1==civilizations.length){
+                    res.send("Nenhuma civilização com este nome foi encontrada no jogo "+nome)
+                }
+            }
+        }
+        
+
         res.send(vetor)
     })
     
