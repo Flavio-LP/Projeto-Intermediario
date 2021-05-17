@@ -15,7 +15,7 @@ API do nome do pokémon:https://pokeapi.co/api/v2/pokemon/?limit=3
 
 API do HP do pokémon: https://api.pokemontcg.io/v2/cards
 
-A terceira rota é '/ageofempeires2' na qual é feito uma requisição no site da steam para retornar o nome do jogo e a edição dele através de uma web scraping, após isso é feito uma requisição em um API de age of empires 2 para pegar as civilizações e isso tudo é colocado em um vetor em forma de objeto e é retornado a página html.
+A terceira rota é '/ageofempeires2' na qual é feito uma requisição no site da steam para retornar o nome do jogo e a edição dele através de uma web scraping, após isso é feito uma requisição em um API de age of empires 2 para pegar as civilizações e isso tudo é colocado em um vetor em forma de objeto e é retornado a página html. obs: Está rota possui a maneira de filtrar através de query string.
 
 site steam:https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/
 
