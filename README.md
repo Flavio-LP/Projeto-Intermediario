@@ -1,6 +1,8 @@
 Projeto Intermediario da disciplina de PPW II
 
-Foram implementados três rotas neste Projeto
+Foram implementados três rotas além da rota raiz neste Projeto
+
+A rota raiz da informações de como prosseguir diante das outras rotas.
 
 A primeira rota implementada foi a '/steam' na qual funciona intercalado com o sistema de busca de jogos na steam, ao passar uma query string onde rota faz uma requisição no site da steam e traz os jogos como o nome e juntamente traz o ano de lançamento dos jogos que foram buscados pela própria busca da steam, esse retorno dos dados é feito por web scraping na qual retorna dados em html para que possa ser feita a captura dos dados, formando um objeto com o nome e a data de lançamento, com limite máximo 50 primeiros jogos que o algoritmo de busca da steam retorna.
 
