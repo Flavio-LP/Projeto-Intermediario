@@ -4,6 +4,10 @@ const parser = require('node-html-parser').parse
 const app = express()
 const PORT = process.env.PORT || 8080
 
+app.get('/',function(req,res){
+    res.send("Está página possui três rotas implementadas, são elas /steam(exemplo:),/api e /ageofempires2, qualquer outra página será redirecionada para a steam")
+})
+
 app.get('/steam', function(req, res){ //- ROTA QUE FAZ WEB SCARPING
     var query = req.query.term  //- RECEBE UM TERMO PRA PESQUISAR NA STEAM
     if(query==undefined){
