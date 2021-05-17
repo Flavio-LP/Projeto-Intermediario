@@ -5,7 +5,7 @@ const app = express()
 const PORT = process.env.PORT || 8080
 
 app.get('/',function(req,res){
-    res.send("Está página possui três rotas implementadas, são elas /steam  (exemplo:https://projetointermediarioppw2.herokuapp.com/steam/?temr=cs, /api ou /api?/pokemon='escrava o nome de um pokemon' e /ageofempires2, qualquer outra página será redirecionada para a steam, está rota possui a implementação de uma query string para filtrar as civilizações, exemplo:https://projetointermediarioppw2.herokuapp.com/ageofempires2/?civilização=Byzantines")
+    res.send("Está página possui três rotas implementadas, são elas /steam  (exemplo:https://projetointermediarioppw2.herokuapp.com/steam/?term=cs, /api ou /api?/pokemon='escrava o nome de um pokemon' e /ageofempires2, qualquer outra página será redirecionada para a steam, está rota possui a implementação de uma query string para filtrar as civilizações, exemplo:https://projetointermediarioppw2.herokuapp.com/ageofempires2/?civilização=Byzantines")
 })
 
 app.get('/steam', function(req, res){ //- ROTA QUE FAZ WEB SCARPING
