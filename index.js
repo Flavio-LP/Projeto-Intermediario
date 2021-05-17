@@ -5,7 +5,7 @@ const app = express()
 const PORT = process.env.PORT || 8080
 
 app.get('/',function(req,res){
-    res.send("Está página possui três rotas implementadas, são elas /steam(exemplo:),/api e /ageofempires2, qualquer outra página será redirecionada para a steam")
+    res.send("Está página possui três rotas implementadas, são elas /steam(exemplo:https://projetointermediarioppw2.herokuapp.com/steam/?temr='escreva o nome de um jogo que queira procurar na steam'),/api ou /api?/pokemon='escrava o nome de um pokemon' e /ageofempires2, qualquer outra página será redirecionada para a steam")
 })
 
 app.get('/steam', function(req, res){ //- ROTA QUE FAZ WEB SCARPING
@@ -44,6 +44,10 @@ app.get('/steam', function(req, res){ //- ROTA QUE FAZ WEB SCARPING
         })
         for(i=0;i<vetor.length;i++){
             vetor[i].Data_Lancamento=datas_jogos[i];
+        }
+        console.log(vetor)
+        if(vetor==""){
+            vetor=['Nenhum jogo foi encontrado com esse termo!']
         }
         res.send(vetor)
        
@@ -108,7 +112,7 @@ app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
                         break;
                     }
                 }
-        if(vetor[0]=[]){ //- RETORNA UM ERRO 404 CASO A QUERY STRING NÃO FOI ENCONTRADA
+        if(vetor[0]==[]){ //- RETORNA UM ERRO 404 CASO A QUERY STRING NÃO FOI ENCONTRADA
             vetor[0]="Error 404, query não encontrada!"
             res.send(vetor)
         }else{
