@@ -20,3 +20,5 @@ A terceira rota é '/ageofempeires2' na qual é feito uma requisição no site d
 site steam:https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/
 
 site api:https://age-of-empires-2-api.herokuapp.com/api/v1/civilizations
+
+Neste projeto foram usandas as bibliotecas : Node, Express, Axios e node-html-parser
