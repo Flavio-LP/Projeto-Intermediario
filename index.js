@@ -4,10 +4,10 @@ const parser = require('node-html-parser').parse
 const app = express()
 const PORT = process.env.PORT || 8080
 
-app.get('/steam', function(req, res){
-    var query = req.query.term
+app.get('/steam', function(req, res){ //- ROTA QUE FAZ WEB SCARPING
+    var query = req.query.term  //- RECEBE UM TERMO PRA PESQUISAR NA STEAM
     if(query==undefined){
-        vetor='Error 404, query sem valor!'
+        vetor='Error 404, query sem valor!' // RETORNA ERRO 404 CASO NÃO TENHO QUERY STRING 
         res.send(vetor)
         return
     }
@@ -15,25 +15,23 @@ app.get('/steam', function(req, res){
     var jogos = []
     var datas_jogos=[]
 
-    var url = "https://store.steampowered.com/search/?term="+query
+    var url = "https://store.steampowered.com/search/?term="+query //- FAZ A REQUISIÇÃO NA STEAM
     var requisicao = axios.get(url)
     requisicao.then(function(resposta){
         var root = parser(resposta.data)
-        var pesquisa=root.querySelectorAll('.col.search_name.ellipsis')
+        var pesquisa=root.querySelectorAll('.col.search_name.ellipsis') //- FAZ A CAPTURA POR CLASSES NO HTML RETORNADO
         var nome=parser(pesquisa)
-        var jogo_lista=nome.querySelectorAll('.title')
+        var jogo_lista=nome.querySelectorAll('.title') //- PEGA O TITULO DO JOGO PESQUISADO
         jogo_lista.forEach(function(jogos_lista){
             var obs={
                 "Nome:": jogos_lista.innerHTML,
                 "Data_Lancamento":[]
                 
             }
-            //console.log(obs)
             vetor.push(obs)
         })
-        var datas=root.querySelectorAll('.col.search_released.responsive_secondrow')
+        var datas=root.querySelectorAll('.col.search_released.responsive_secondrow') //- PEGA AS DATAS DE LANÇAMENTO DOS JOGOS PESQUISADOS
         var data=parser(datas)
-        //console.log(data.innerText)
         datas.forEach(function(data){
             var obs={
                 "Data":data.innerText
@@ -51,13 +49,13 @@ app.get('/steam', function(req, res){
 })
 
 
-app.get('/api', function(req, res){
+app.get('/api', function(req, res){   //- ROTA QUE FAZ REQUISIÇÃO EM DUAS APIs
     // query string
     var query = req.query.pokemon
     var vetor = []
     var pokemon1 = []
     console.log(query)
-    if(query==undefined){
+    if(query==undefined){  //-CASO NO TENHA QUERY STRING, FAZ UMA REQUISIÇÃO EM DUAS API E RETORNA O NOME DE UMA API E O HP DO POKEMON DE OUTRA API, ONDE TRAZ OS 3 PRIMEIROS POKÉMONS DA PRIMEIRA API
         var url = "https://pokeapi.co/api/v2/pokemon/?limit=3"
         var requisicao = axios.get(url)
         requisicao.then(function(resposta){
@@ -66,7 +64,7 @@ app.get('/api', function(req, res){
                 pokemon1[i]=resposta.data.results[i].name
             }
         })
-        var url1 ="https://api.pokemontcg.io/v2/cards"
+        var url1 ="https://api.pokemontcg.io/v2/cards" //- SEGUNDA API PRA PEGAR O HP DO POKÉMON
         var req=axios.get(url1)
         req.then(function(resposta1){
             for(i=0;i<3;i++){
@@ -85,14 +83,14 @@ app.get('/api', function(req, res){
             res.send(vetor)
         })
     }else{
-        var url = "https://pokeapi.co/api/v2/pokemon/"+query
+        var url = "https://pokeapi.co/api/v2/pokemon/"+query  //- FAZ A REQUISIÇÃO DO NOME DO POKÉMON QUE FOI PASSADO PELA QUERY STRING
         var requisicao = axios.get(url)
         requisicao.then(function(resposta){
             
             pokemon1.push(resposta.data.species.name)
         })
         
-        var url1 ="https://api.pokemontcg.io/v2/cards"
+        var url1 ="https://api.pokemontcg.io/v2/cards" // FAZ A REQUISIÇÃO E TRAZ O HP DO POKÉMON QUE FOI PASSADO POR QUERY STRING
         var req=axios.get(url1)
         req.then(function(resposta1){
                 for(j=0;j<250;j++){
@@ -106,7 +104,7 @@ app.get('/api', function(req, res){
                         break;
                     }
                 }
-        if(vetor[0]=[]){
+        if(vetor[0]=[]){ //- RETORNA UM ERRO 404 CASO A QUERY STRING NÃO FOI ENCONTRADA
             vetor[0]="Error 404, query não encontrada!"
             res.send(vetor)
         }else{
@@ -119,38 +117,39 @@ app.get('/api', function(req, res){
     
 })
 
-app.get('/ageofempeires2',function(req, res){
+app.get('/ageofempeires2',function(req, res){  //- ROTA DO AGE OF EMPIRES 2
     var vetor=[]
-    var url="https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/"
+    var url="https://store.steampowered.com/app/813780/Age_of_Empires_II_Definitive_Edition/" //- FAZ REQUISIÇÃO NO SITE DA STEAM
     var requisicao = axios.get(url)
     requisicao.then(function(resposta){
         var root=parser(resposta.data)
-        var jogo=root.querySelectorAll('.apphub_AppName')
+        var jogo=root.querySelectorAll('.apphub_AppName') //- PEGA O NOME E A EDIÇÃO DO JOGO
         var nome_jogo=parser(jogo)
-        vetor[0]="Nome: "+ nome_jogo.innerText
-        //console.log(nome_jogo.innerText)
+        var obs={
+            "Nome": nome_jogo.innerText
+        }
+        vetor.push(obs) //- INSERE NO VETOR O NOME DO JOGO
     })
-    var url="https://age-of-empires-2-api.herokuapp.com/api/v1/civilizations"
+    
+    var url="https://age-of-empires-2-api.herokuapp.com/api/v1/civilizations" //- FAZ REQUISIÇÃO EM UMA API PRA PEGAR AS CIVILIZAÇÕES DO AGE OF EMPIRES 2
     var req = axios.get(url)
     req.then(function(resposta){
         var civilizations=resposta.data.civilizations;
         for(i=0;i<civilizations.length;i++){
-            vetor.push("Civilização:"+civilizations[i].name)
+            var obs={
+                "Civilizações":civilizations[i].name
+            }
+            vetor.push(obs)
         }
         res.send(vetor)
-        /*civilizations.forEach(function(){
-            console.log(resposta.data.civilizations)
-            //vetor.push(resposta.data.civilizations.name)
-        })
-        //console.log(resposta.data.civilizations[0])*/
     })
     
 
 })
 
-/*app.get('*', function(req, res){
-    res.redirect('http://professor.venson.net.br')
-})*/
+app.get('*', function(req, res){ //- QUALQUER ROTA QUE DIFERENTE DAS IMPLEMENTADAS SERÃO REDIRECIONADAS PARA O MEU PERFIL DA STEAM
+    res.redirect('https://steamcommunity.com/profiles/76561198310703375/')
+})
 
 app.listen(PORT, function(){
     console.log("Servidor iniciado")
