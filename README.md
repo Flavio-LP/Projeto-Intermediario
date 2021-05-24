@@ -23,4 +23,6 @@ site : steam:https://store.steampowered.com/app/813780/Age_of_Empires_II_Definit
 
 site api : https://age-of-empires-2-api.herokuapp.com/api/v1/civilizations
 
+Além disso qualquer outra rota que não foi implementada, o usuário será redirecionado pro meu perfil na steam!
+
 Neste projeto foram usandas as bibliotecas : Node, Express, Axios e node-html-parser
